@@ -1,0 +1,104 @@
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: "Montserrat", "Segoe UI", sans-serif;
+  color: var(--text-main);
+  background: var(--bg-base);
+}
+
+header {
+  background: #000;
+  padding: 0.65rem 1.5rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+
+.logo {
+  width: clamp(150px, 24vw, 150px);
+  height: auto;
+  display: block;
+}
+
+.sidebar {
+  width: 220px;
+  min-width: 220px;
+  background:  #f45e4b;
+  padding: 1.6rem 1rem;
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.sidebar ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.sidebar a {
+  display: block;
+  padding: 0.75rem 0.9rem;
+  text-decoration: none;
+  color: #ffffff;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-weight: 600;
+}
+
+.page-shell {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+footer {
+  background: #000;
+  color: #d2d2d2;
+  padding: 0.9rem 1.2rem;
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  font-size: 0.92rem;
+}
+
+
+@media (max-width: 900px) {
+  .page-shell {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 0.95rem 1rem;
+  }
+
+  .sidebar ul {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    padding: 0.6rem 0.9rem;
+  }
+
+  .logo {
+    width: clamp(170px, 55vw, 240px);
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .schedule-array {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
