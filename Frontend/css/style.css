@@ -47,6 +47,11 @@ header {
   font-weight: 600;
 }
 
+.sidebar a.active,
+.sidebar a[aria-current="page"] {
+  background: rgba(0, 0, 0, 1);
+}
+
 .page-shell {
   display: flex;
   flex: 1;
