@@ -1,24 +1,19 @@
 async function cargarProductosPeliculas() {
   try {
-    const response = await fetch('https://rickandmortyapi.com/api/character?page=1');
+    const response = await fetch('/api/cartelera');
     if (!response.ok) throw new Error(`Error: ${response.status}`);
 
-    const data = await response.json();
-    const productos = data.results || [];
+    const productos = await response.json(); //ex data
+    //const productos = data.results || [];
+    //console.log(productos)
 
     const container = document.getElementById('products-container');
     container.innerHTML = '';
 
     productos.forEach((producto) => {
-      const productCard = `
-        <div class="product-card">
-          <img src="${producto.image}" alt="${producto.name}">
-          <h3>${producto.name}</h3>
-          <p>${producto.species} - ${producto.status}</p>
-          <span class="precio">$1500</span>
-        </div>
-      `;
-      container.innerHTML += productCard;
+      const productCard = new Pelicula(producto.id, producto.titulo, `/images/${producto.imagen}`);
+      container.appendChild(productCard.createHtmlElement());
+      console.log('Peliculas encontradas')
     });
   } catch (error) {
     console.error('Error al cargar productos:', error);
