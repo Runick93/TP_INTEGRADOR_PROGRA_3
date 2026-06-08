@@ -9,7 +9,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.status(200).sendFile(path.join(__dirname, 'public','pages' ,'index.html'));
 });
 
 app.listen(PORT, () => {
