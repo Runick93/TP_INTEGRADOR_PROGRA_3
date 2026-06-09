@@ -10,14 +10,7 @@ async function cargarProductosPeliculas() {
     container.innerHTML = '';
 
     productos.forEach((producto) => {
-      const productCard = `
-        <div class="product-card">
-          <img src="${producto.image}" alt="${producto.name}">
-          <h3>${producto.name}</h3>
-          <p>${producto.species} - ${producto.status}</p>
-          <span class="precio">$1500</span>
-        </div>
-      `;
+      const productCard = new Pelicula(producto.id, )
       container.innerHTML += productCard;
     });
   } catch (error) {
