@@ -8,15 +8,14 @@ const rutaCliente = require('./rutas/cliente');
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'Frontend')));
 
 app.use('/api', rutaCliente);
 
 app.get('/', (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, 'public','pages' ,'index.html'));
+    res.status(200).sendFile(path.join(__dirname, 'Frontend','pages' ,'index.html'));
 });
 
 app.listen(PORT, () => {
     console.log(`Servidor escucuhando en el puerto ${PORT}`);
 });
-
