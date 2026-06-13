@@ -18,21 +18,21 @@
     <div class="topbar-inner">
       <img src="../images/logo.png" alt="Logo" class="logo" />
     </div>
-    <div id="contenedor-nombre" style="color: bisque;"></div>
   </header>
 
   <div class="page-shell">
     <nav class="sidebar" aria-label="Navegacion principal">
       <ul>
         <li><a href="../index.html">🏠 Inicio</a></li>
-        <li><a href="products.html" class="active" aria-current="page">🎬 Entradas</a></li>
-        <li><a href="#">🛒 Carrito</a></li>
-        <li><a href="#">🎟️ Ticket</a></li>
+        <li class="nav-link-protected"><a href="products.html" class="active" aria-current="page">🎬 Entradas</a></li>
+        <li class="nav-link-protected"><a href="carrito.html">🛒 Carrito</a></li>
+        <li class="nav-link-protected"><a href="ticket.html">🎟️ Ticket</a></li>
       </ul>
     </nav>
 
     <main id="content" class="products-main">
       <div class="products-panel">
+        <div id="contenedor-nombre" class="bienvenida-usuario"></div>
         <div class="products-actions">
           <button id="btn-peliculas" class="btn-filter active-filter" type="button">Entradas</button>
           <button id="btn-combos" class="btn-filter" type="button">Combos</button>

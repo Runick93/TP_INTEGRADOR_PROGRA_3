@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'Frontend')));
 app.use('/api', rutaCliente);
 
 app.get('/', (req, res) => {
-    res.status(200).sendFile(path.join(__dirname, 'Frontend','pages' ,'index.html'));
+    res.status(200).sendFile(path.join(__dirname, 'Frontend' ,'index.html'));
 });
 
 app.listen(PORT, () => {
