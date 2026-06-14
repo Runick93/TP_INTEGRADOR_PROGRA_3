@@ -124,6 +124,8 @@ function renderizarCarrito() {
 document.addEventListener('DOMContentLoaded', () => {
     const contenedorNombre = document.getElementById('contenedor-nombre');
     const nombreUsuario = localStorage.getItem('nombreUsuario');
+
+
     if (contenedorNombre && nombreUsuario) {
         const h2 = document.createElement('h2');
         h2.textContent = nombreUsuario;
@@ -132,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderizarCarrito();
 
+
     document.getElementById('btn-vaciar').addEventListener('click', () => {
         if (confirm('Vaciar el carrito?')) {
             localStorage.removeItem('carrito');
@@ -139,20 +142,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    document.getElementById('btn-confirmar').addEventListener('click', () => {
-        const carrito = obtenerCarrito();
-        if (carrito.length === 0) return;
+    const modal = document.getElementById('modal-confirmacion');
+    const btnModalCancelar = document.getElementById('btn-modal-cancelar');
+    const btnModalAceptar = document.getElementById('btn-modal-aceptar');
+    const btnConfirmar = document.getElementById('btn-confirmar');
 
-        const ticket = {
-            usuario: nombreUsuario,
-            fecha: new Date().toISOString(),
-            items: carrito,
-            total: calcularTotal(carrito),
-        };
+    if (btnConfirmar && modal) {
+        btnConfirmar.addEventListener('click', () => {
+            const carrito = obtenerCarrito();
+            if (carrito.length === 0) return;
+            modal.style.display = 'flex'; 
+        });
+    }
 
-        localStorage.setItem('ticket', JSON.stringify(ticket));
-        localStorage.removeItem('carrito');
+    if (btnModalCancelar && modal) {
+        btnModalCancelar.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+    }
 
-        window.location.href = 'ticket.html';
-    });
+    if (btnModalAceptar) {
+        btnModalAceptar.addEventListener('click', () => {
+            const carrito = obtenerCarrito();
+            const ticket = {
+                usuario: nombreUsuario,
+                fecha: new Date().toISOString(),
+                items: carrito,
+                total: calcularTotal(carrito),
+            };
+            localStorage.setItem('ticket', JSON.stringify(ticket));
+            localStorage.removeItem('carrito');
+            modal.style.display = 'none';
+            window.location.href = 'ticket.html';
+        });
+    }
 });
