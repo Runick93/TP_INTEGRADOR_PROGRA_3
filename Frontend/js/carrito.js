@@ -19,7 +19,7 @@ function renderizarCarrito() {
     container.innerHTML = '';
 
     if (carrito.length === 0) {
-        container.innerHTML = '<p class="carrito-vacio">Tu carrito esta vacio.</p>';
+        container.innerHTML = '<p class="carrito-vacio">Tu carrito esta vacío.</p>';
         footer.style.display = 'none';
         return;
     }
@@ -121,6 +121,19 @@ function renderizarCarrito() {
     });
 }
 
+let funcionAlAceptar = null;
+
+function renderizarModal(titulo, mensaje, accionAceptar){
+    const modal = document.getElementById('modal-confirmacion');
+    
+    document.getElementById('modal-titulo').textContent = titulo;
+    document.getElementById('modal-mensaje').textContent = mensaje;
+    
+    funcionAlAceptar = accionAceptar;
+    
+    modal.style.display = 'flex';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const contenedorNombre = document.getElementById('contenedor-nombre');
     const nombreUsuario = localStorage.getItem('nombreUsuario');
@@ -128,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (contenedorNombre && nombreUsuario) {
         const h2 = document.createElement('h2');
-        h2.textContent = nombreUsuario;
+        h2.textContent = `¡Hola ${nombreUsuario}!`;
         contenedorNombre.appendChild(h2);
     }
 
@@ -136,22 +149,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     document.getElementById('btn-vaciar').addEventListener('click', () => {
-        if (confirm('Vaciar el carrito?')) {
+        renderizarModal('¿Vaciar el carrito?', 'Todos los elementos del carrito se van a eliminar.', () => {
             localStorage.removeItem('carrito');
             renderizarCarrito();
-        }
+        });
     });
 
     const modal = document.getElementById('modal-confirmacion');
     const btnModalCancelar = document.getElementById('btn-modal-cancelar');
     const btnModalAceptar = document.getElementById('btn-modal-aceptar');
     const btnConfirmar = document.getElementById('btn-confirmar');
+    btnModalCancelar.className = 'btn-eliminar';
+    btnModalAceptar.className = 'btn-confirmar';
 
     if (btnConfirmar && modal) {
         btnConfirmar.addEventListener('click', () => {
             const carrito = obtenerCarrito();
             if (carrito.length === 0) return;
-            modal.style.display = 'flex'; 
+            renderizarModal('¿Confirmar Pedido?', 'Usted va a confirmar su compra.', () =>{
+                const ticket = {
+                    usuario: nombreUsuario,
+                    fecha: new Date().toISOString(),
+                    items: carrito,
+                    total: calcularTotal(carrito),
+                };
+                localStorage.setItem('ticket', JSON.stringify(ticket));
+                localStorage.removeItem('carrito');
+                window.location.href = 'ticket.html';
+            }) 
         });
     }
 
@@ -163,17 +188,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnModalAceptar) {
         btnModalAceptar.addEventListener('click', () => {
-            const carrito = obtenerCarrito();
-            const ticket = {
-                usuario: nombreUsuario,
-                fecha: new Date().toISOString(),
-                items: carrito,
-                total: calcularTotal(carrito),
-            };
-            localStorage.setItem('ticket', JSON.stringify(ticket));
-            localStorage.removeItem('carrito');
-            modal.style.display = 'none';
-            window.location.href = 'ticket.html';
-        });
+        if (typeof funcionAlAceptar === 'function') {
+            funcionAlAceptar();
+        }
+        modal.style.display = 'none';
+    });
     }
 });

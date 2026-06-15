@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const h2 = document.createElement("h2");
   
   console.log(nombreUsuario);
-  h2.appendChild(document.createTextNode(nombreUsuario));
+  h2.appendChild(document.createTextNode(`¡Hola ${nombreUsuario}!`));
   contenedorNombre.appendChild(h2);
 
 
