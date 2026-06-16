@@ -1,19 +1,19 @@
 async function cargarProductosPeliculas() {
   try {
-    const response = await fetch('https://rickandmortyapi.com/api/character');
+    const response = await fetch('/api/cartelera');
     if (!response.ok) throw new Error(`Error: ${response.status}`);
 
-    const data = await response.json();
-    const personajes = data.results || [];
+    const peliculas = await response.json(); // esto cambia el nombre de data a productos porque ahora vienen directamente los objetos en el json
+    //const personajes = data.results || []; // esta linea ya no es necesaria porque no existe mas un .results
 
     const container = document.getElementById('products-container');
     container.innerHTML = '';
 
-    personajes.forEach((personaje) => {
-      const descripcion = `${personaje.species} - ${personaje.status} - Origen: ${personaje.origin.name}`;
+    peliculas.forEach((p) => {
+      //const descripcion = `${personaje.species} - ${personaje.status} - Origen: ${personaje.origin.name}`; linea ya no necesaria 
       const precio = 3000 + Math.floor(Math.random() * 3000);
 
-      const productCard = new Pelicula(`pelicula-${personaje.id}`, personaje.name, descripcion, precio, personaje.image);
+      const productCard = new Pelicula(`pelicula-${p.id}`, p.titulo, p.descripcion, precio, `/images/${p.imagen}`); 
       container.appendChild(productCard.createHtmlElement());
     });
   } catch (error) {
@@ -23,24 +23,24 @@ async function cargarProductosPeliculas() {
 
 async function cargarProductosCombos() {
   try {
-    const response = await fetch('https://thesimpsonsapi.com/api/characters?page=1');
-    if (!response.ok) throw new Error('Error: ' + response.status);
+    const response = await fetch('/api/combos');
+    if (!response.ok) throw new Error(`Error: ${response.status}`);
 
-    const data = await response.json();
-    const combos = data.results || [];
+    const combos = await response.json();
+    //const combos = data.results || [];
 
     const container = document.getElementById('products-container');
     container.innerHTML = '';
 
     combos.forEach((c) => {
-      const img = c.portrait_path
-        ? 'https://cdn.thesimpsonsapi.com' + c.portrait_path
-        : 'https://via.placeholder.com/300x200?text=Combo';
+      // const img = c.portrait_path
+      //   ? 'https://cdn.thesimpsonsapi.com' + c.portrait_path
+      //   : 'https://via.placeholder.com/300x200?text=Combo';  // esto ya no haria falta
 
-      const descripcion = c.occupation || 'Combo especial';
-      const precio = 3000 + Math.floor(Math.random() * 3000);
+      const descripcion = c.descripcion || 'Combo especial';
+      //const precio = 3000 + Math.floor(Math.random() * 3000); /// el precio lo tiene la tabla combos
 
-      const productCard = new Pelicula(`combo-${c.id}`, c.name || 'Combo', descripcion, precio, img);
+      const productCard = new Pelicula(`combo-${c.id}`, c.titulo || 'Combo', descripcion, c.precio, `/images/${c.imagen}`); //por ahora usamos la clase pelicula
       container.appendChild(productCard.createHtmlElement());
     });
   } catch (error) {
@@ -74,3 +74,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   cargarProductosPeliculas();
 });
+
+
+
+
+
+
