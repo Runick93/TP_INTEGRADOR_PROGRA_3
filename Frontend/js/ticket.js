@@ -1,3 +1,5 @@
+const btnPdf = document.getElementById('btn-pdf');
+
 function renderizarTicket() {
     const container = document.getElementById('ticket-container');
     const ticket = JSON.parse(localStorage.getItem('ticket'));
@@ -70,6 +72,17 @@ function renderizarTicket() {
     totalDiv.appendChild(totalValor);
     container.appendChild(totalDiv);
 }
+
+btnPdf.addEventListener('click', () => {
+    const ticket = JSON.parse(localStorage.getItem('ticket'));
+    
+    if (ticket && ticket.id_orden) {
+        window.location.href = `/api/ventas/${ticket.id_orden}/pdf`;  // pupeteer 
+    } else {
+        alert("No se encontró el número de orden de este ticket.");
+    }
+});
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const contenedorNombre = document.getElementById('contenedor-nombre');

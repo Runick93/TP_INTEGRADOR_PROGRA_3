@@ -10,20 +10,19 @@ async function cargarDatos() {
 
         // 1. Insertar Películas
         await Pelicula.bulkCreate([
-            { titulo: 'Batman', descripcion: 'El caballero de la noche', imagen: 'batman.webp', activo: true },
-            { titulo: 'Scarface', descripcion: 'Mafia y drogas', imagen: 'scarface.webp', activo: true },
-            { titulo: 'Viernes 13 Parte III', descripcion: 'Terror', imagen: 'viernes_13_3.webp', activo: true },
-            { titulo: 'Película Vieja', descripcion: 'Ya no se proyecta', precio: 3000, imagen: 'vieja.jpg', activo: false } // 👈 Probamos el activo: false
+            { titulo: 'Tiburon 4', descripcion: 'Durante su estadía en las Bermudas, Ellen Brody se da cuenta de que el tiburón que mató a su hijo la está acechando.' , imagen: 'tiburon_4.webp', activo: true },
+            { titulo: 'Pesadilla en la calle Elm', descripcion: 'Un grupo de adolescentes sufre unas pesadillas horribles en las que un ser deforme con garras de acero les persigue.', imagen: 'a_nightmare_on_elm_street.webp', activo: true },
+            { titulo: 'Top Gun', descripcion: 'El joven piloto Maverick Mitchell acude a una prestigiosa escuela aérea, famosa por formar a los mejores pilotos de combate del país.', imagen: 'top_gun.webp', activo: true }
         ]);
         console.log('¡Películas insertadas!');
 
         // 2. Insertar Snacks
-        await Snack.bulkCreate([
+        /*await Snack.bulkCreate([
             { titulo: 'Pochoclos Megacinema', descripcion: 'Bolsa De Pochoclos Grande', precio: 15000, imagen: 'bolsa-pochoclos.webp', activo: true },
             { titulo: 'Gaseosa Grande', descripcion: 'Vaso de 1L a elección', precio: 7000, imagen: 'vaso.webp', activo: true },
             { titulo: 'Combo Balde Megacinema', descripcion: 'Balde de pchoclos + 2 Gaseosas de 1L a elección', precio: 25000, imagen: 'combo_pareja_balde.webp', activo: true }
         ]);
-        console.log('¡Snacks insertados con éxito!');
+        console.log('¡Snacks insertados con éxito!');*/
 
     } catch (error) {
         console.error('Error al insertar los datos:', error);

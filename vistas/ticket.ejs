@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket de Compra - MegaCinema</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            color: #000;
+            margin: 0;
+            padding: 10px;
+            width: 75mm;
+        }
+        .text-center { text-align: center; }
+        .linea { border-top: 1px dashed #000; margin: 10px 0; }
+        table { width: 100%; border-collapse: collapse; }
+        .total { font-size: 14px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="text-center">
+        <h2>MEGACINEMA</h2>
+        <p>AUTOSERVICIO DE ENTRADAS</p>
+        <p>Avellaneda, P.B.A</p>
+    </div>
+    
+    <div class="linea"></div>
+    
+    <p><strong>Orden N°:</strong> <%= String(venta.id).padStart(5, '0') %></p>
+    <p><strong>Fecha:</strong> <%= new Date(venta.fecha).toLocaleDateString('es-AR') %></p>
+    <p><strong>Cliente:</strong> <%= venta.nombre_usuario %></p>
+    
+    <div class="linea"></div>
+    
+    <table>
+        <thead>
+            <tr>
+                <th style="text-align: left;">Desc.</th>
+                <th style="text-align: right;">Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% items.forEach(item => { %>
+                <tr>
+                    <td><%= item.cantidad %> x <%= item.titulo %></td>
+                    <td style="text-align: right;">$<%= item.precio * item.cantidad %></td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+    <div class="linea"></div>
+    
+    <table>
+        <tr class="total">
+            <td>TOTAL PAGADO:</td>
+            <td style="text-align: right;">$<%= venta.total %></td>
+        </tr>
+    </table>
+    
+    <div class="linea"></div>
+    
+    <div class="text-center">
+        <p>¡Gracias por tu visita!</p>
+        <p>Conservá este ticket para ingresar a la sala.</p>
+    </div>
+</body>
+</html>

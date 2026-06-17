@@ -40,7 +40,7 @@ async function cargarProductosCombos() {
       const descripcion = c.descripcion || 'Combo especial';
       //const precio = 3000 + Math.floor(Math.random() * 3000); /// el precio lo tiene la tabla combos
 
-      const productCard = new Pelicula(`combo-${c.id}`, c.titulo || 'Combo', descripcion, c.precio, `/images/${c.imagen}`); //por ahora usamos la clase pelicula
+      const productCard = new Pelicula(`combo-${c.id}`, c.titulo || 'Combo', descripcion, c.precio, `/images/snacks/${c.imagen}`); //por ahora usamos la clase pelicula
       container.appendChild(productCard.createHtmlElement());
     });
   } catch (error) {

@@ -162,23 +162,50 @@ document.addEventListener('DOMContentLoaded', () => {
     btnModalCancelar.className = 'btn-eliminar';
     btnModalAceptar.className = 'btn-confirmar';
 
-    if (btnConfirmar && modal) {
+    if (btnConfirmar) {
         btnConfirmar.addEventListener('click', () => {
             const carrito = obtenerCarrito();
             if (carrito.length === 0) return;
-            renderizarModal('¿Confirmar Pedido?', 'Usted va a confirmar su compra.', () =>{
+            renderizarModal('¿Confirmar Pedido?', 'Usted va a confirmar su compra.', async () =>{
+                
+                try {
+                const response = await fetch('/api/ventas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        nombreUsuario: nombreUsuario,
+                        total: calcularTotal(carrito),
+                        carrito: carrito
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error al guardar la venta en el servidor');
+                }
+
+                const resultado = await response.json();
+                
                 const ticket = {
+                    id_orden: resultado.id_orden,
                     usuario: nombreUsuario,
                     fecha: new Date().toISOString(),
                     items: carrito,
                     total: calcularTotal(carrito),
                 };
+
                 localStorage.setItem('ticket', JSON.stringify(ticket));
                 localStorage.removeItem('carrito');
                 window.location.href = 'ticket.html';
-            }) 
-        });
-    }
+                
+            } catch (error) {
+                console.error('Hubo un problema al procesar la venta:', error);
+                alert('No se pudo conectar con el servidor para registrar la compra. Intente nuevamente.');
+            }
+        }); 
+    });
+}
 
     if (btnModalCancelar && modal) {
         btnModalCancelar.addEventListener('click', () => {
