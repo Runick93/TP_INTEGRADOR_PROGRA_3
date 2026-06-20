@@ -147,6 +147,7 @@ footer {
 
 .product-card .precio {
   font-weight: 700;
+  margin-top: auto;
 }
 
 .cantidad-container {
