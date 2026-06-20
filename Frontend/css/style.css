@@ -145,6 +145,22 @@ footer {
   border-radius: 8px;
 }
 
+.product-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: 2.6rem;
+}
+
+.product-desc {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  min-height: 4.2rem;
+}
+
 .product-card .precio {
   font-weight: 700;
   margin-top: auto;
@@ -223,6 +239,23 @@ footer {
   background: #000;
   color: #fff;
   border-color: #000;
+}
+
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-indicador {
+  font-weight: 600;
 }
 
 .add-flow {

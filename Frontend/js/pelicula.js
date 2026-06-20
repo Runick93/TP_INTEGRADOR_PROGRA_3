@@ -24,9 +24,11 @@ class Pelicula {
         imagenPeli.setAttribute('alt', this.titulo);
 
         const nombrePeli = document.createElement('h3');
+        nombrePeli.className = 'product-title';
         nombrePeli.appendChild(document.createTextNode(this.titulo));
 
         const descripcionPeli = document.createElement('p');
+        descripcionPeli.className = 'product-desc';
         descripcionPeli.appendChild(document.createTextNode(this.descripcion));
 
         const precioPeli = document.createElement('span');
