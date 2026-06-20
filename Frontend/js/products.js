@@ -59,8 +59,7 @@ async function cargarProductosPeliculas() {
     const response = await fetch('/api/cartelera');
     if (!response.ok) throw new Error(`Error: ${response.status}`);
 
-    const peliculas = await response.json(); // esto cambia el nombre de data a productos porque ahora vienen directamente los objetos en el json
-    //const personajes = data.results || []; // esta linea ya no es necesaria porque no existe mas un .results
+    const peliculas = await response.json();
 
     productosActuales = peliculas.map((p) => ({
       id: `pelicula-${p.id}`,
@@ -82,7 +81,6 @@ async function cargarProductosCombos() {
     if (!response.ok) throw new Error(`Error: ${response.status}`);
 
     const combos = await response.json();
-    //const combos = data.results || [];
 
     productosActuales = combos.map((c) => ({
       id: `combo-${c.id}`,
