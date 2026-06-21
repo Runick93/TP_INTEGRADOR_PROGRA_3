@@ -77,7 +77,7 @@ btnPdf.addEventListener('click', () => {
     const ticket = JSON.parse(localStorage.getItem('ticket'));
     
     if (ticket && ticket.id_orden) {
-        window.location.href = `/api/ventas/${ticket.id_orden}/pdf`;  // pupeteer 
+        window.location.href = `/api/ventas/${ticket.id_orden}/pdf`;
     } else {
         alert("No se encontró el número de orden de este ticket.");
     }

@@ -1,21 +1,75 @@
+const PRODUCTOS_POR_PAGINA = 3;
+let paginaActual = 1;
+let productosActuales = [];
+
+function renderizarPagina() {
+  const container = document.getElementById('products-container');
+  container.innerHTML = '';
+
+  const inicio = (paginaActual - 1) * PRODUCTOS_POR_PAGINA;
+  const items = productosActuales.slice(inicio, inicio + PRODUCTOS_POR_PAGINA);
+
+  items.forEach(({ id, titulo, descripcion, precio, imagen }) => {
+    const productCard = new Pelicula(id, titulo, descripcion, precio, imagen);
+    container.appendChild(productCard.createHtmlElement());
+  });
+
+  renderizarPaginacion();
+}
+
+function renderizarPaginacion() {
+  const paginationContainer = document.getElementById('pagination-container');
+  paginationContainer.innerHTML = '';
+
+  const totalPaginas = Math.ceil(productosActuales.length / PRODUCTOS_POR_PAGINA);
+  if (totalPaginas <= 1) return;
+
+  const crearBoton = (texto, disabled, onClick) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'btn-filter pagination-btn';
+    btn.textContent = texto;
+    btn.disabled = disabled;
+    btn.addEventListener('click', onClick);
+    return btn;
+  };
+
+  paginationContainer.appendChild(
+    crearBoton('« Anterior', paginaActual === 1, () => {
+      paginaActual--;
+      renderizarPagina();
+    })
+  );
+
+  const indicador = document.createElement('span');
+  indicador.className = 'pagination-indicador';
+  indicador.textContent = `Página ${paginaActual} de ${totalPaginas}`;
+  paginationContainer.appendChild(indicador);
+
+  paginationContainer.appendChild(
+    crearBoton('Siguiente »', paginaActual === totalPaginas, () => {
+      paginaActual++;
+      renderizarPagina();
+    })
+  );
+}
+
 async function cargarProductosPeliculas() {
   try {
     const response = await fetch('/api/cartelera');
     if (!response.ok) throw new Error(`Error: ${response.status}`);
 
-    const peliculas = await response.json(); // esto cambia el nombre de data a productos porque ahora vienen directamente los objetos en el json
-    //const personajes = data.results || []; // esta linea ya no es necesaria porque no existe mas un .results
+    const peliculas = await response.json();
 
-    const container = document.getElementById('products-container');
-    container.innerHTML = '';
-
-    peliculas.forEach((p) => {
-      //const descripcion = `${personaje.species} - ${personaje.status} - Origen: ${personaje.origin.name}`; linea ya no necesaria 
-      const precio = 3000 + Math.floor(Math.random() * 3000);
-
-      const productCard = new Pelicula(`pelicula-${p.id}`, p.titulo, p.descripcion, precio, `/images/${p.imagen}`); 
-      container.appendChild(productCard.createHtmlElement());
-    });
+    productosActuales = peliculas.map((p) => ({
+      id: `pelicula-${p.id}`,
+      titulo: p.titulo,
+      descripcion: p.descripcion,
+      precio: 3000 + Math.floor(Math.random() * 3000),
+      imagen: `/images/${p.imagen}`,
+    }));
+    paginaActual = 1;
+    renderizarPagina();
   } catch (error) {
     console.error('Error al cargar productos:', error);
   }
@@ -27,22 +81,16 @@ async function cargarProductosCombos() {
     if (!response.ok) throw new Error(`Error: ${response.status}`);
 
     const combos = await response.json();
-    //const combos = data.results || [];
 
-    const container = document.getElementById('products-container');
-    container.innerHTML = '';
-
-    combos.forEach((c) => {
-      // const img = c.portrait_path
-      //   ? 'https://cdn.thesimpsonsapi.com' + c.portrait_path
-      //   : 'https://via.placeholder.com/300x200?text=Combo';  // esto ya no haria falta
-
-      const descripcion = c.descripcion || 'Combo especial';
-      //const precio = 3000 + Math.floor(Math.random() * 3000); /// el precio lo tiene la tabla combos
-
-      const productCard = new Pelicula(`combo-${c.id}`, c.titulo || 'Combo', descripcion, c.precio, `/images/snacks/${c.imagen}`); //por ahora usamos la clase pelicula
-      container.appendChild(productCard.createHtmlElement());
-    });
+    productosActuales = combos.map((c) => ({
+      id: `combo-${c.id}`,
+      titulo: c.titulo || 'Combo',
+      descripcion: c.descripcion || 'Combo especial',
+      precio: c.precio,
+      imagen: `/images/snacks/${c.imagen}`,
+    }));
+    paginaActual = 1;
+    renderizarPagina();
   } catch (error) {
     console.error('Error al cargar combos:', error);
   }
