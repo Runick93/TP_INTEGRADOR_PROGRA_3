@@ -415,6 +415,21 @@ footer {
   justify-content: flex-end;
 }
 
+.btn-pdf {
+  background: #ececec;
+  color: #111;
+  margin-right: 4px;
+  border: 1px solid #cfcfcf;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-pdf:hover {
+  background: #e2e2e2;;
+}
+
 .btn-salir {
   background: #000000;
   color: #ffffff;
