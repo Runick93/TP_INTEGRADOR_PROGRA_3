@@ -4,8 +4,10 @@ require('dotenv').config();
 const path = require('node:path');
 const PORT = process.env.PORT;
 const rutaCliente = require('./rutas/cliente');
+const rutaAdmins = require('./rutas/administradores');
 const sequelize = require('./conexion'); 
 const Venta = require('./modelos/Venta');
+const Usuario = require('./modelos/Usuario');
 
 app.set('view engine', 'ejs');
 app.set('views', './vistas');
@@ -14,8 +16,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname, 'Frontend')));
 
 app.use('/api', rutaCliente);
-
-
+app.use('/admin', rutaAdmins);
 
 app.get('/', (req, res) => {
     res.status(200).sendFile(path.join(__dirname, 'Frontend' ,'index.html'));
@@ -29,5 +30,5 @@ sequelize.sync().then(() => {
         });
     })
     .catch(err => {
-        console.error('Error crítico al sincronizar la base de datos:', err);
+        console.error(err);
     });
