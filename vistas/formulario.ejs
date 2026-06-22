@@ -11,18 +11,107 @@
     />
     <link rel="icon" type="image/png" href="../favicon.png" />
     <link rel="stylesheet" href="/css/style.css" />
-    <title>Megacinema - Login</title>
+    <title>Megacinema - <%= edicion ? 'Editar Producto' : 'Nuevo Producto' %></title>
   </head>
 
   <body>
+    <header class="admin-header">
+        <h1>MegaCinema Dashboard</h1>
+        <div class="user-info">
+            <span>Administrador</span>
+            <a href="/admin/login" class="btn-logout">Cerrar Sesion</a>
+        </div>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="form-card">
+            <h1><%= edicion ? 'Editar Producto' : 'Agregar Nuevo Producto' %></h1>
+
+            <form
+                class="producto-form"
+                method="POST"
+                enctype="multipart/form-data"
+                action="<%= edicion ? `/admin/editar/${tipoProducto}/${producto.id}` : '/admin/productos/nuevo' %>"
+            >
+                <% if (!edicion) { %>
+                <div class="tipo-selector">
+                    <label>
+                        <input type="radio" name="tipo" value="pelicula" <%= tipoProducto === 'pelicula' ? 'checked' : '' %> onchange="actualizarTipo(this.value)" />
+                        Pelicula
+                    </label>
+                    <label>
+                        <input type="radio" name="tipo" value="snack" <%= tipoProducto === 'snack' ? 'checked' : '' %> onchange="actualizarTipo(this.value)" />
+                        Snack
+                    </label>
+                </div>
+                <% } %>
+
+                <div class="form-group">
+                    <label for="titulo">Titulo</label>
+                    <input type="text" id="titulo" name="titulo" value="<%= producto.titulo || '' %>" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripcion</label>
+                    <textarea id="descripcion" name="descripcion" rows="4"><%= producto.descripcion || '' %></textarea>
+                </div>
+
+                <div class="form-group" id="grupo-precio" style="<%= tipoProducto === 'snack' ? '' : 'display:none;' %>">
+                    <label for="precio">Precio</label>
+                    <input type="number" id="precio" name="precio" min="0" value="<%= producto.precio || '' %>" />
+                </div>
+
+                <div class="form-group">
+                    <label for="imagen">Imagen</label>
+
+                    <% if (edicion && producto.imagen) { %>
+                        <div class="imagen-actual">
+                            <img
+                                src="<%= tipoProducto === 'snack' ? '/images/snacks/' : '/images/' %><%= producto.imagen %>"
+                                alt="Imagen actual"
+                                style="max-width: 150px; display: block; margin-bottom: 8px;"
+                            />
+                            <p>Imagen actual. Selecciona una nueva solo si queres reemplazarla.</p>
+                        </div>
+                    <% } %>
+
+                    <div class="file-input-wrapper">
+                        <input
+                            type="file"
+                            id="imagen"
+                            name="imagen"
+                            accept="image/*"
+                            class="file-input-hidden"
+                            onchange="actualizarNombreImagen(this)"
+                            <%= edicion ? '' : 'required' %>
+                        />
+                        <label for="imagen" class="btn-secondary file-label">Seleccionar imagen</label>
+                        <span id="nombre-imagen" class="file-name"></span>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="/admin/dashboard" class="btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn-primary"><%= edicion ? 'Guardar Cambios' : 'Crear Producto' %></button>
+                </div>
+            </form>
+        </div>
+    </main>
 
     <footer>
       <span>Juan Lencioni & Leandro Quinteros</span>
     </footer>
+
+    <script>
+        function actualizarTipo(tipo) {
+            const grupoPrecio = document.getElementById('grupo-precio');
+            grupoPrecio.style.display = tipo === 'snack' ? '' : 'none';
+        }
+
+        function actualizarNombreImagen(input) {
+            const span = document.getElementById('nombre-imagen');
+            span.textContent = input.files.length ? input.files[0].name : '';
+        }
+    </script>
   </body>
-    
-
-    
-
-  </script>
 </html>

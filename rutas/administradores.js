@@ -9,6 +9,20 @@ const ejs = require('ejs');
 const path = require('path');
 const { where } = require('sequelize');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const tipo = req.body.tipo || req.params.tipo;
+        const carpeta = tipo === 'snack' ? 'images/snacks' : 'images';
+        cb(null, path.join(__dirname, '..', 'Frontend', carpeta));
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+const upload = multer({ storage });
 
 
 router.get('/dashboard', async (req, res) => {
@@ -46,32 +60,6 @@ router.get('/dashboard', async (req, res) => {
     }
 });
 
-router.post('/:producto/:accion/:id', async (req, res) => {
-    try {
-        const {producto, accion, id} = req.params;
-        const nuevoEstado = (accion === 'activar');
-
-        var Modelo;
-        if (producto === 'pelicula') {
-            Modelo = Pelicula;
-        } else if (producto === 'snack') {
-            Modelo = Snack; 
-        } else {
-            return res.status(400).send("Error en tipo de producto");
-        }
-
-        await Modelo.update(
-            { activo: nuevoEstado }, 
-            { where: { id: id } }
-        );
-
-        res.redirect('/admin/dashboard');
-    } catch (error) {
-console.error(error);
-        res.status(500).send("Error al realizar la modificaion");
-    }
-});
-
 router.post('/login', async (req, res) => {
     try {
         const { correo, clave } = req.body;
@@ -104,9 +92,29 @@ router.get('/login', (req, res) => {
 
 router.get('/productos/nuevo', (req, res) => {
     res.render('formulario', {
-        producto: {}, 
+        producto: {},
         edicion: false,
         tipoProducto: 'pelicula'});
+});
+
+router.post('/productos/nuevo', upload.single('imagen'), async (req, res) => {
+    try {
+        const { tipo, titulo, descripcion, precio } = req.body;
+        const imagen = req.file ? req.file.filename : null;
+
+        if (tipo === 'pelicula') {
+            await Pelicula.create({ titulo, descripcion, imagen });
+        } else if (tipo === 'snack') {
+            await Snack.create({ titulo, descripcion, imagen, precio });
+        } else {
+            return res.status(400).send("Error en tipo de producto");
+        }
+
+        res.redirect('/admin/dashboard');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error al crear el producto");
+    }
 });
 
 router.get('/editar/:tipo/:id', async (req, res) => {
@@ -128,6 +136,63 @@ router.get('/editar/:tipo/:id', async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).send("Error al cargar el producto");
+    }
+});
+
+router.post('/editar/:tipo/:id', upload.single('imagen'), async (req, res) => {
+    try {
+        const { tipo, id } = req.params;
+        const { titulo, descripcion, precio } = req.body;
+
+        var Modelo;
+        if (tipo === 'pelicula') {
+            Modelo = Pelicula;
+        } else if (tipo === 'snack') {
+            Modelo = Snack;
+        } else {
+            return res.status(400).send("Error en tipo de producto");
+        }
+
+        const datos = { titulo, descripcion };
+        if (req.file) {
+            datos.imagen = req.file.filename;
+        }
+        if (tipo === 'snack') {
+            datos.precio = precio;
+        }
+
+        await Modelo.update(datos, { where: { id: id } });
+
+        res.redirect('/admin/dashboard');
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error al modificar el producto");
+    }
+});
+
+router.post('/:producto/:accion/:id', async (req, res) => {
+    try {
+        const {producto, accion, id} = req.params;
+        const nuevoEstado = (accion === 'activar');
+
+        var Modelo;
+        if (producto === 'pelicula') {
+            Modelo = Pelicula;
+        } else if (producto === 'snack') {
+            Modelo = Snack;
+        } else {
+            return res.status(400).send("Error en tipo de producto");
+        }
+
+        await Modelo.update(
+            { activo: nuevoEstado },
+            { where: { id: id } }
+        );
+
+        res.redirect('/admin/dashboard');
+    } catch (error) {
+console.error(error);
+        res.status(500).send("Error al realizar la modificaion");
     }
 });
 

@@ -48,7 +48,7 @@ router.post('/ventas', async (req, res) => {
         });
 
         res.status(200).json({
-            mensaje: "Compra guardada con éxito",
+            mensaje: "Compra guardada con exito",
             id_orden: nuevaVenta.id,
             fecha: nuevaVenta.fecha
         });
