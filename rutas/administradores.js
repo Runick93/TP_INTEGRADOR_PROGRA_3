@@ -131,4 +131,46 @@ router.get('/editar/:tipo/:id', async (req, res) => {
     }
 });
 
+router.post('/productos/nuevo', async (req, res) => {
+    try {
+        const { tipo, titulo, descripcion, imagen, precio } = req.body;
+
+        if (tipo === 'pelicula') {
+            await Pelicula.create({titulo: titulo,descripcion: descripcion,imagen: imagen,activo: 1});
+        } else if (tipo === 'snack') {
+            await Snack.create({titulo: titulo, descripcion: descripcion,precio: parseInt(precio),imagen: imagen,activo: 1});
+        };    
+        res.redirect('/admin/dashboard');
+
+    } catch (error) {
+        console.error("Error al crear producto:", error);
+        res.status(500).send("Error al crear el producto");
+    }
+});
+
+router.post('/productos/editar/:tipo/:id', async (req, res) => {
+    try {
+        const { tipo, id } = req.params;
+        const { titulo, descripcion, imagen, precio } = req.body;
+
+        if (tipo === 'pelicula') {
+            await Pelicula.update(
+                {titulo: titulo, descripcion: descripcion, imagen: imagen},
+                { where: { id: id } }
+            );
+        } else if (tipo === 'snack') {
+            await Snack.update(
+                {titulo: titulo, descripcion: descripcion, precio: parseInt(precio), imagen: imagen },
+                { where: { id: id } }
+            );
+        } else {
+            return res.status(400).send("Tipo de producto inválido");
+        }
+        res.redirect('/admin/dashboard');
+    } catch (error) {
+        console.error("Error al editar producto:", error);
+        res.status(500).send("Error al guardar los cambios");
+    }
+});
+
 module.exports = router;
