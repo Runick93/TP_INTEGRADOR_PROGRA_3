@@ -43,7 +43,7 @@ function renderizarPaginacion() {
 
   const indicador = document.createElement('span');
   indicador.className = 'pagination-indicador';
-  indicador.textContent = `Página ${paginaActual} de ${totalPaginas}`;
+  indicador.textContent = `Pagina ${paginaActual} de ${totalPaginas}`;
   paginationContainer.appendChild(indicador);
 
   paginationContainer.appendChild(

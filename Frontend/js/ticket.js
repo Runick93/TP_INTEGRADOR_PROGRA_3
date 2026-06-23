@@ -79,7 +79,7 @@ btnPdf.addEventListener('click', () => {
     if (ticket && ticket.id_orden) {
         window.location.href = `/api/ventas/${ticket.id_orden}/pdf`;
     } else {
-        alert("No se encontró el número de orden de este ticket.");
+        alert("No se encontro el numero de orden de este ticket.");
     }
 });
 

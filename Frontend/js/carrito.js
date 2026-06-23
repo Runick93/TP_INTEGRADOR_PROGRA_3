@@ -19,7 +19,7 @@ function renderizarCarrito() {
     container.innerHTML = '';
 
     if (carrito.length === 0) {
-        container.innerHTML = '<p class="carrito-vacio">Tu carrito esta vacío.</p>';
+        container.innerHTML = '<p class="carrito-vacio">Tu carrito esta vacio.</p>';
         footer.style.display = 'none';
         return;
     }
