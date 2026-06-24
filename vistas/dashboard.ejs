@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="/css/style.css" />
     <title>Megacinema - Dashboard</title>
   </head>
-
+  
   <body>
     <header class="admin-header">
         <h1>MegaCinema Dashboard</h1>
@@ -70,9 +70,20 @@
                         <%  }); %>
                     </tbody>
                 </table>
+                <% if (totalPaginasPelis > 1) { %>
+                    <div class="pagination-container">
+                        <a href="?pagePelis=<%= pagePelisActual - 1 %>&pageSnacks=<%= pageSnacksActual %>" 
+                           class="pagination-btn <%= pagePelisActual === 1 ? 'disabled' : '' %>">« Anterior</a>
+                        
+                        <span class="pagination-indicador">Página <%= pagePelisActual %> de <%= totalPaginasPelis %></span>
+                        
+                        <a href="?pagePelis=<%= pagePelisActual + 1 %>&pageSnacks=<%= pageSnacksActual %>" 
+                           class="pagination-btn <%= pagePelisActual === totalPaginasPelis ? 'disabled' : '' %>">Siguiente »</a>
+                    </div>
+                <% } %>
             </section>
             <% } %>
-
+            
             <% if(!productoActual || productoActual === 'todos' || productoActual === 'snacks'){ %>
             <section class="products-section">
                 <h2>Snacks y Combos</h2>
@@ -115,6 +126,17 @@
                         <%  }); %>
                     </tbody>
                 </table>
+            <% if (totalPaginasSnacks > 1) { %>
+                    <div class="pagination-container">
+                        <a href="?pagePelis=<%= pagePelisActual %>&pageSnacks=<%= pageSnacksActual - 1 %>" 
+                           class="pagination-btn <%= pageSnacksActual === 1 ? 'disabled' : '' %>">« Anterior</a>
+                        
+                        <span class="pagination-indicador">Página <%= pageSnacksActual %> de <%= totalPaginasSnacks %></span>
+                        
+                        <a href="?pagePelis=<%= pagePelisActual %>&pageSnacks=<%= pageSnacksActual + 1 %>" 
+                           class="pagination-btn <%= pageSnacksActual === totalPaginasSnacks ? 'disabled' : '' %>">Siguiente »</a>
+                    </div>
+                <% } %>
             </section>
             <% } %>
         </div>

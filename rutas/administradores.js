@@ -27,8 +27,8 @@ const upload = multer({ storage });
 
 router.get('/dashboard', async (req, res) => {
     try {
-        const { producto, estado } = req.query;
-        whereEstado = {};
+       const { producto, estado, pagePelis, pageSnacks } = req.query;
+        let whereEstado = {};
         if (estado === 'activos') {
             whereEstado.activo = 1;
         } else if (estado === 'inactivos') {
@@ -52,8 +52,25 @@ router.get('/dashboard', async (req, res) => {
         }else if (producto === 'snacks'){
             snacks = await Snack.findAll({ where: whereEstado });
         }
+        const limite = 5;
+        const pagePelisActual = parseInt(pagePelis) || 1;
+        const pageSnacksActual = parseInt(pageSnacks) || 1;
 
-        res.render('dashboard', {peliculas : peliculas, snacks : snacks, estadoActual : estado || 'todos', productoActual: producto || 'todos'});    
+        const totalPaginasPelis = Math.ceil(peliculas.length / limite);
+        const totalPaginasSnacks = Math.ceil(snacks.length / limite);
+
+        const inicioPelis = (pagePelisActual - 1) * limite;
+        const peliculasPaginadas = peliculas.slice(inicioPelis, inicioPelis + limite);
+
+        const inicioSnacks = (pageSnacksActual - 1) * limite;
+        const snacksPaginados = snacks.slice(inicioSnacks, inicioSnacks + limite);
+
+
+
+        res.render('dashboard', {peliculas: peliculasPaginadas,snacks: snacksPaginados, estadoActual : estado || 'todos', productoActual: producto || 'todos', pagePelisActual,
+            pageSnacksActual,
+            totalPaginasPelis,
+            totalPaginasSnacks});    
     } catch (error) {
         console.error("Error al intentar traer peliculas", error);
         res.status(500).json({error: "No se pudieron traer las peliculas"});
