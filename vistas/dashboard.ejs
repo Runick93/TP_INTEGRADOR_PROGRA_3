@@ -60,11 +60,9 @@
                                     <a href="/admin/editar/pelicula/<%= pelicula.id %>" class="btn-action btn-edit">Editar</a>
 
                                     <% if (pelicula.activo) { %>
-                                        <button type="button" class="btn-action btn-delete" data-bs-toggle="modal" data-bs-target="#confirmBajaModal" data-action="/admin/pelicula/desactivar/<%= pelicula.id %>">Baja</button>
+                                        <button type="button" class="btn-action btn-delete" data-bs-toggle="modal" data-bs-target="#confirmAccionModal" data-action="/admin/pelicula/desactivar/<%= pelicula.id %>" data-titulo="Confirmar baja" data-mensaje="¿Está seguro de que desea eliminar este producto?" data-boton-clase="btn-delete">Baja</button>
                                     <% } else { %>
-                                        <form method="POST" action="/admin/pelicula/activar/<%= pelicula.id %>">
-                                            <button type="submit" class="btn-action btn-activate">Alta</button>
-                                        </form>
+                                        <button type="button" class="btn-action btn-activate" data-bs-toggle="modal" data-bs-target="#confirmAccionModal" data-action="/admin/pelicula/activar/<%= pelicula.id %>" data-titulo="Confirmar activación" data-mensaje="¿Está seguro de que desea activar este producto?" data-boton-clase="btn-activate">Alta</button>
                                     <% } %>
                                 </td>
                             </tr>
@@ -107,11 +105,9 @@
                                     <a href="/admin/editar/snack/<%= snack.id %>" class="btn-action btn-edit">Editar</a>
 
                                     <% if (snack.activo) { %>
-                                        <button type="button" class="btn-action btn-delete" data-bs-toggle="modal" data-bs-target="#confirmBajaModal" data-action="/admin/snack/desactivar/<%= snack.id %>">Baja</button>
+                                        <button type="button" class="btn-action btn-delete" data-bs-toggle="modal" data-bs-target="#confirmAccionModal" data-action="/admin/snack/desactivar/<%= snack.id %>" data-titulo="Confirmar baja" data-mensaje="¿Está seguro de que desea eliminar este producto?" data-boton-clase="btn-delete">Baja</button>
                                     <% } else { %>
-                                        <form method="POST" action="/admin/snack/activar/<%= snack.id %>">
-                                            <button type="submit" class="btn-action btn-activate">Alta</button>
-                                        </form>
+                                        <button type="button" class="btn-action btn-activate" data-bs-toggle="modal" data-bs-target="#confirmAccionModal" data-action="/admin/snack/activar/<%= snack.id %>" data-titulo="Confirmar activación" data-mensaje="¿Está seguro de que desea activar este producto?" data-boton-clase="btn-activate">Alta</button>
                                     <% } %>
                                 </td>
                             </tr>
@@ -124,20 +120,20 @@
         </div>
     </main>
 
-    <div class="modal fade" id="confirmBajaModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="confirmAccionModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Confirmar baja</h5>
+                    <h5 class="modal-title" id="confirmAccionTitulo">Confirmar acción</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
                 </div>
-                <div class="modal-body">
-                    ¿Está seguro de que desea eliminar este producto?
+                <div class="modal-body" id="confirmAccionMensaje">
+                    ¿Está seguro?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <form id="formConfirmBaja" method="POST" action="">
-                        <button type="submit" class="btn-action btn-delete">Confirmar</button>
+                    <form id="formConfirmAccion" method="POST" action="">
+                        <button type="submit" class="btn-action" id="confirmAccionBoton">Confirmar</button>
                     </form>
                 </div>
             </div>
@@ -154,11 +150,16 @@
       crossorigin="anonymous"
     ></script>
     <script>
-        const confirmBajaModal = document.getElementById('confirmBajaModal');
-        confirmBajaModal.addEventListener('show.bs.modal', (event) => {
+        const confirmAccionModal = document.getElementById('confirmAccionModal');
+        confirmAccionModal.addEventListener('show.bs.modal', (event) => {
             const trigger = event.relatedTarget;
-            const action = trigger.getAttribute('data-action');
-            document.getElementById('formConfirmBaja').setAttribute('action', action);
+            document.getElementById('formConfirmAccion').setAttribute('action', trigger.getAttribute('data-action'));
+            document.getElementById('confirmAccionTitulo').textContent = trigger.getAttribute('data-titulo');
+            document.getElementById('confirmAccionMensaje').textContent = trigger.getAttribute('data-mensaje');
+
+            const boton = document.getElementById('confirmAccionBoton');
+            boton.classList.remove('btn-delete', 'btn-activate');
+            boton.classList.add(trigger.getAttribute('data-boton-clase'));
         });
     </script>
   </body>
