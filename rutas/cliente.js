@@ -47,6 +47,18 @@ router.post('/ventas', async (req, res) => {
             detalle: JSON.stringify(carrito)
         });
 
+        for (const item of carrito) {
+            const [tipo, idStr] = item.id.split('-');
+            const idProducto = Number(idStr);
+            const datosRelacion = { through: { cantidad: item.cantidad, precio_unitario: item.precio } };
+
+            if (tipo === 'pelicula') {
+                await nuevaVenta.addPelicula(idProducto, datosRelacion);
+            } else if (tipo === 'combo') {
+                await nuevaVenta.addSnack(idProducto, datosRelacion);
+            }
+        }
+
         res.status(200).json({
             mensaje: "Compra guardada con exito",
             id_orden: nuevaVenta.id,
@@ -56,6 +68,21 @@ router.post('/ventas', async (req, res) => {
     } catch (error) {
         console.error("Error al procesar la venta:", error);
         res.status(500).json({ error: "Hubo un error en el servidor al procesar el pago." });
+    }
+});
+
+router.get('/ventas', async (req, res) => {
+    try {
+        const ventas = await Venta.findAll({
+            include: [
+                { model: Pelicula, through: { attributes: ['cantidad', 'precio_unitario'] } },
+                { model: Snack, through: { attributes: ['cantidad', 'precio_unitario'] } }
+            ]
+        });
+        res.status(200).json(ventas);
+    } catch (error) {
+        console.error("Error al traer el listado de ventas:", error);
+        res.status(500).json({ error: "No se pudo traer el listado de ventas" });
     }
 });
 
