@@ -5,9 +5,10 @@ const path = require('node:path');
 const PORT = process.env.PORT;
 const rutaCliente = require('./rutas/cliente');
 const rutaAdmins = require('./rutas/administradores');
-const sequelize = require('./conexion'); 
+const sequelize = require('./conexion');
 const Venta = require('./modelos/Venta');
 const Usuario = require('./modelos/Usuario');
+require('./modelos/asociaciones');
 
 app.set('view engine', 'ejs');
 app.set('views', './vistas');
