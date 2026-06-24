@@ -84,9 +84,32 @@ router.post('/login', async (req, res) => {
 
 router.get('/login', (req, res) => {
     try {
-        res.render('login');     
+        res.render('login');
     } catch (error) {
         console.log(error);
+    }
+});
+
+router.post('/usuarios', async (req, res) => {
+    try {
+        const { correo, password } = req.body;
+
+        if (!correo || !password) {
+            return res.status(400).json({ error: "Correo y password son obligatorios" });
+        }
+
+        const existente = await Usuario.findOne({ where: { correo } });
+        if (existente) {
+            return res.status(409).json({ error: "Ya existe un usuario con ese correo" });
+        }
+
+        const hash = await bcrypt.hash(password, 10);
+        const usuario = await Usuario.create({ correo, contraseña: hash });
+
+        res.status(201).json({ id: usuario.id, correo: usuario.correo });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Error al crear el usuario" });
     }
 });
 
